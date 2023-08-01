@@ -1,11 +1,16 @@
 package com.carlosguilherme.dseventos.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -27,6 +32,11 @@ public class Atividade {
 	
 	@OneToOne(mappedBy = "atividade", cascade = CascadeType.ALL)
 	private Bloco blocos;
+	
+	@ManyToMany
+	@JoinTable(name = "tb_atividade_participante", joinColumns = @JoinColumn(name= "atividade_id"), 
+	inverseJoinColumns = @JoinColumn(name= "participante_id"))
+	private Set<Participante> participantes = new HashSet<>();
 	
 	public Atividade() {
 	}
@@ -87,5 +97,11 @@ public class Atividade {
 	public void setBlocos(Bloco blocos) {
 		this.blocos = blocos;
 	}
+
+	public Set<Participante> getParticipates() {
+		return participantes;
+	}
+	
+	
 
 }
