@@ -1,9 +1,9 @@
 package com.carlosguilherme.dseventos.entities;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +30,7 @@ public class Atividade {
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 	
-	@OneToOne(mappedBy = "atividade", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "atividade")
 	private Bloco blocos;
 	
 	@ManyToMany
@@ -41,17 +41,25 @@ public class Atividade {
 	public Atividade() {
 	}
 
-	public Atividade(Integer id, String nome, String descricao, Double preco, Categoria categoria, Bloco blocos) {
+	public Atividade(Integer id, String nome, String descricao, Double preco, Categoria categoria) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 		this.categoria = categoria;
-		this.blocos = blocos;
+		
 	}
 
 	public Integer getId() {
 		return id;
+	}
+	
+	public Bloco getBlocos() {
+		return blocos;
+	}
+
+	public void setBlocos(Bloco blocos) {
+		this.blocos = blocos;
 	}
 
 	public void setId(Integer id) {
@@ -90,18 +98,25 @@ public class Atividade {
 		this.categoria = categoria;
 	}
 
-	public Bloco getBlocos() {
-		return blocos;
-	}
-
-	public void setBlocos(Bloco blocos) {
-		this.blocos = blocos;
-	}
-
 	public Set<Participante> getParticipates() {
 		return participantes;
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Atividade other = (Atividade) obj;
+		return Objects.equals(id, other.id);
+	}
 
 }
