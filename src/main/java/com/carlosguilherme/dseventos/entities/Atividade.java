@@ -1,6 +1,8 @@
 package com.carlosguilherme.dseventos.entities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,8 +32,8 @@ public class Atividade {
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 	
-	@OneToOne(mappedBy = "atividade")
-	private Bloco blocos;
+	@OneToMany(mappedBy = "atividade")
+	private List<Bloco> blocos = new ArrayList<>();
 	
 	@ManyToMany
 	@JoinTable(name = "tb_atividade_participante", joinColumns = @JoinColumn(name= "atividade_id"), 
@@ -41,25 +43,20 @@ public class Atividade {
 	public Atividade() {
 	}
 
-	public Atividade(Integer id, String nome, String descricao, Double preco, Categoria categoria) {
+	
+	public Atividade(Integer id, String nome, String descricao, Double preco, Categoria categoria, List<Bloco> blocos,
+			Set<Participante> participantes) {
 		this.id = id;
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 		this.categoria = categoria;
-		
+		this.blocos = blocos;
+		this.participantes = participantes;
 	}
 
 	public Integer getId() {
 		return id;
-	}
-	
-	public Bloco getBlocos() {
-		return blocos;
-	}
-
-	public void setBlocos(Bloco blocos) {
-		this.blocos = blocos;
 	}
 
 	public void setId(Integer id) {
@@ -98,7 +95,12 @@ public class Atividade {
 		this.categoria = categoria;
 	}
 
-	public Set<Participante> getParticipates() {
+	public List<Bloco> getBlocos() {
+		return blocos;
+	}
+
+
+	public Set<Participante> getParticipantes() {
 		return participantes;
 	}
 
